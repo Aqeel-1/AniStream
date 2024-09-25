@@ -6,6 +6,7 @@
 
 const express = require('express');
 const animeRouter = require('./routes/animeRoutes');
+const globalErrorHandler = require('./controllers/errorControllers');
 
 // create the main app
 const app = express();
@@ -15,4 +16,7 @@ app.use(express.json());
 
 // Routers
 app.use('/api/v1/animes', animeRouter);
+
+// Global Error Handler
+app.use(globalErrorHandler);
 module.exports = app;
