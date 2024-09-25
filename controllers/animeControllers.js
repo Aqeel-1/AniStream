@@ -4,8 +4,10 @@
 
 const Anime = require('../models/animeModel');
 const APIFeatures = require('../utils/apiFeatures');
+const AppError = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync');
 
-exports.getAllAnimes = async (req, res, next) => {
+exports.getAllAnimes = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(Anime.find(), req.query)
     .filter()
     .sort()
@@ -19,9 +21,9 @@ exports.getAllAnimes = async (req, res, next) => {
     results: animes.length,
     data: animes,
   });
-};
+});
 
-exports.createAnime = async (req, res, next) => {
+exports.createAnime = catchAsync(async (req, res, next) => {
   const newAnime = await Anime.create(req.body);
 
   res.status(201).json({
@@ -30,33 +32,41 @@ exports.createAnime = async (req, res, next) => {
       newAnime,
     },
   });
-};
+});
 
-exports.getAnime = async (req, res, next) => {
+exports.getAnime = catchAsync(async (req, res, next) => {
   const anime = await Anime.findById(req.params.id);
   res.status(200).json({
     status: 'success',
     data: anime,
   });
-};
+});
 
-exports.updateAnime = async (req, res, next) => {
+exports.updateAnime = catchAsync(async (req, res, next) => {
   const updatedAnime = await Anime.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
 
-  res.status(201).json({
+  if (!updatedAnime) {
+    return next(new AppError('Anime not found!', 404));
+  }
+
+  res.status(200).json({
     status: 'success',
     data: updatedAnime,
   });
-};
+});
 
-exports.deleteAnime = async (req, res, next) => {
+exports.deleteAnime = catchAsync(async (req, res, next) => {
   const deletedAnime = await Anime.findByIdAndDelete(req.params.id);
+
+  if (!deletedAnime) {
+    return next(new AppError('Anime not found!', 404));
+  }
 
   res.status(204).json({
     status: 'success',
     data: deletedAnime,
   });
-};
+});
