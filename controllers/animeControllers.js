@@ -1,3 +1,5 @@
+/* eslint-disable node/no-missing-require */
+/* eslint-disable import/no-unresolved */
 /* animeControllers.js
  * this file contain all controllers for handling anime requests
  */
