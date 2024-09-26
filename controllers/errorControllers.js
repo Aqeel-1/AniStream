@@ -1,3 +1,5 @@
+/* eslint-disable node/no-missing-require */
+/* eslint-disable import/no-unresolved */
 const AppError = require('../utils/appError');
 
 const handleCastErrorDB = (err) => {
