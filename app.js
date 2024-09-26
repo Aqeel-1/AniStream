@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* app.js
  * this file contain all main routes in the api
  * also contain importent middleweres that used by the app itself
@@ -5,6 +6,7 @@
  */
 
 const express = require('express');
+const cors = require('cors');
 const animeRouter = require('./routes/animeRoutes');
 const globalErrorHandler = require('./controllers/errorControllers');
 
@@ -12,6 +14,7 @@ const globalErrorHandler = require('./controllers/errorControllers');
 const app = express();
 
 // middleweres
+app.use(cors());
 app.use(express.json());
 
 // Routers
