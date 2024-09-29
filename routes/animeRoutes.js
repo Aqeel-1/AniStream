@@ -6,6 +6,7 @@ const express = require('express');
 
 const animeControllers = require('../controllers/animeControllers');
 const episodeControllers = require('../controllers/episodeControllers');
+const authControllers = require('../controllers/authControllers');
 
 const router = express.Router();
 
@@ -13,24 +14,48 @@ const router = express.Router();
 router
   .route('/')
   .get(animeControllers.getAllAnimes)
-  .post(animeControllers.createAnime);
+  .post(
+    authControllers.protect,
+    authControllers.restrictTo('admin'),
+    animeControllers.createAnime,
+  );
 
 router
   .route('/:id')
   .get(animeControllers.getAnime)
-  .patch(animeControllers.updateAnime)
-  .delete(animeControllers.deleteAnime);
+  .patch(
+    authControllers.protect,
+    authControllers.restrictTo('admin'),
+    animeControllers.updateAnime,
+  )
+  .delete(
+    authControllers.protect,
+    authControllers.restrictTo('admin'),
+    animeControllers.deleteAnime,
+  );
 
 // Route for managing episodes under an anime
 router
   .route('/:animeId/episodes')
   .get(episodeControllers.getAllEpisodes) // Get all episodes for a specific anime
-  .post(episodeControllers.createEpisode); // Create a new episode for a specific anime
+  .post(
+    authControllers.protect,
+    authControllers.restrictTo('admin'),
+    episodeControllers.createEpisode,
+  ); // Create a new episode for a specific anime
 
 router
   .route('/:animeId/episodes/:episodeId')
   .get(episodeControllers.getEpisode) // Get a specific episode
-  .patch(episodeControllers.updateEpisode) // Update an episode
-  .delete(episodeControllers.deleteEpisode); // Delete an episode
+  .patch(
+    authControllers.protect,
+    authControllers.restrictTo('admin'),
+    episodeControllers.updateEpisode,
+  ) // Update an episode
+  .delete(
+    authControllers.protect,
+    authControllers.restrictTo('admin'),
+    episodeControllers.deleteEpisode,
+  ); // Delete an episode
 
 module.exports = router;

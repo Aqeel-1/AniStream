@@ -8,6 +8,7 @@
 const express = require('express');
 const cors = require('cors');
 const animeRouter = require('./routes/animeRoutes');
+const userRouter = require('./routes/userRoutes');
 const globalErrorHandler = require('./controllers/errorControllers');
 
 // create the main app
@@ -19,6 +20,7 @@ app.use(express.json());
 
 // Routers
 app.use('/api/v1/animes', animeRouter);
+app.use('/api/v1/users', userRouter);
 
 // Global Error Handler
 app.use(globalErrorHandler);
