@@ -1,6 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const mongoose = require('mongoose');
 const validator = require('validator');
+const Episode = require('./episodeModel');
+const AppError = require('../utils/AppError');
 
 // Define a list of allowed anime genres (tags)
 const allowedAnimeTags = [
@@ -73,6 +75,21 @@ const animeSchema = new mongoose.Schema({
         'Poster URL must be a valid image format (jpeg, jpg, gif, png) and a valid URL',
     },
   },
+});
+
+animeSchema.pre('findOneAndDelete', async function (next) {
+  const animeId = this.getQuery()._id;
+
+  try {
+    // Delete all episodes associated with the anime
+    await Episode.deleteMany({ animeId });
+  } catch (err) {
+    return next(
+      new AppError('Cannot delete this anime, something went wrong!', 500),
+    );
+  }
+
+  next();
 });
 
 // Create the Anime model from schema
