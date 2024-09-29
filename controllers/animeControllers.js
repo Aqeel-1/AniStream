@@ -6,7 +6,7 @@
 
 const Anime = require('../models/animeModel');
 const APIFeatures = require('../utils/apiFeatures');
-const AppError = require('../utils/appError');
+const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllAnimes = catchAsync(async (req, res, next) => {
